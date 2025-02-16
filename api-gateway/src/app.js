@@ -9,6 +9,7 @@ const logger = require("./utils/logger");
 const proxy = require("express-http-proxy");
 const errorHandler = require("./middleware/errorHandler");
 const notFoundHandler = require("./middleware/notFoundHandler");
+const { validateToken } = require("./middleware/authMiddleware");
 
 const app = express();
 
@@ -65,6 +66,26 @@ app.use(
     userResDecorator: (proxyRes, proxyResData, userReq, UserRes) => {
       logger.info(
         `Response received from Identity service: ${proxyRes.statusCode}`
+      );
+
+      return proxyResData;
+    },
+  })
+);
+
+app.use(
+  "/v1/posts",
+  validateToken,
+  proxy(process.env.POST_SERVICE_URL, {
+    ...proxyOptions,
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      proxyReqOpts.headers["Content-Type"] = "application/json";
+      proxyReqOpts.headers["x-user-id"] = srcReq?.user?.userId;
+      return proxyReqOpts;
+    },
+    userResDecorator: (proxyRes, proxyResData, userReq, UserRes) => {
+      logger.info(
+        `Response received from Post service: ${proxyRes.statusCode}`
       );
 
       return proxyResData;
