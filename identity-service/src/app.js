@@ -8,8 +8,9 @@ const { RateLimiterRedis } = require("rate-limiter-flexible");
 const Redis = require("ioredis");
 const { rateLimit } = require("express-rate-limit");
 const { RedisStore } = require("rate-limit-redis");
-const routes = require("./routes/indentity-service");
+const routes = require("./routes");
 const errorHandler = require("./middleware/errorHandler");
+const notFoundHandler = require("./middleware/notFoundHandler");
 
 const app = express();
 
@@ -61,8 +62,12 @@ const sensitiveEndPointsLimiter = rateLimit({
   }),
 });
 
+// limit
 app.use("/api/auth/register", sensitiveEndPointsLimiter);
-app.use("/api/auth", routes);
+
+// setup route
+app.use("/", routes);
+app.use(notFoundHandler);
 app.use(errorHandler);
 
 module.exports = app;

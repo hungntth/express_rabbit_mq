@@ -8,6 +8,7 @@ const { RedisStore } = require("rate-limit-redis");
 const logger = require("./utils/logger");
 const proxy = require("express-http-proxy");
 const errorHandler = require("./middleware/errorHandler");
+const notFoundHandler = require("./middleware/notFoundHandler");
 
 const app = express();
 
@@ -71,6 +72,7 @@ app.use(
   })
 );
 
+app.use(notFoundHandler);
 app.use(errorHandler);
 
 module.exports = app;

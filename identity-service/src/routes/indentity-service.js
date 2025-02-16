@@ -1,17 +1,34 @@
 const express = require("express");
+const IdentityController = require("../controllers/identity.controller");
 const {
-  registerUser,
-  loginUser,
-  log,
-  logoutUser,
-  refreshToken,
-} = require("../controllers/identity-controller");
+  validateRegistration,
+  validateLogin,
+  validateRefreshToken,
+} = require("../validators/auth.validator");
+const validateHandler = require("../middleware/validateHandler");
+const asyncHandler = require("../helper/asyncHandler");
 
 const router = express.Router();
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-router.post("/logout", logoutUser);
-router.post("/refresh-token", refreshToken);
+router.post(
+  "/register",
+  validateHandler(validateRegistration),
+  asyncHandler(IdentityController.registerUser)
+);
+router.post(
+  "/login",
+  validateHandler(validateLogin),
+  asyncHandler(IdentityController.loginUser)
+);
+router.post(
+  "/logout",
+  validateHandler(validateRefreshToken),
+  asyncHandler(IdentityController.logoutUser)
+);
+router.post(
+  "/refresh-token",
+  validateHandler(validateRefreshToken),
+  asyncHandler(IdentityController.refreshToken)
+);
 
 module.exports = router;
