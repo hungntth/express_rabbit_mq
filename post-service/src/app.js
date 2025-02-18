@@ -7,6 +7,7 @@ const helmet = require("helmet");
 const errorHandler = require("./middleware/errorHandler");
 const notFoundHandler = require("./middleware/notFoundHandler");
 const logger = require("./utils/logger");
+const { connectRabbitMQ } = require("./utils/rabbitmq");
 
 const app = express();
 

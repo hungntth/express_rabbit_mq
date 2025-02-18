@@ -25,6 +25,12 @@ const uploadMedia = async ({ file, userId }) => {
   };
 };
 
+const getAllMedias = async () => {
+  const results = await Media.find();
+  return results;
+};
+
 module.exports = {
   uploadMedia,
+  getAllMedias,
 };

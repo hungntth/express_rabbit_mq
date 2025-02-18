@@ -1,5 +1,6 @@
 const { BadRequestError } = require("../core/error.response");
 const Post = require("../models/Post");
+const { publishEvent } = require("../utils/rabbitmq");
 
 async function invalidatePostsCache({ redisClient, input }) {
   const cachedKey = `post:${input}`;
@@ -77,6 +78,13 @@ const deletePost = async ({ postId, userId, redisClient }) => {
   });
 
   if (!post) throw new BadRequestError("Invalid delete post");
+
+  await publishEvent("post.deleted", {
+    postId,
+    userId,
+    mediasIds: post.mediaIds,
+  });
+
   await invalidatePostsCache({
     redisClient,
     input: postId,

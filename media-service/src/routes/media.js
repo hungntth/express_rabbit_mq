@@ -30,4 +30,6 @@ router.post(
   },
   asyncHandler(MediaController.uploadMedia)
 );
+
+router.get("/get-all", asyncHandler(MediaController.getAllMedias));
 module.exports = router;

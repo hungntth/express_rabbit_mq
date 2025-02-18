@@ -11,6 +11,13 @@ class MediaController {
       }),
     }).send(res);
   };
+
+  getAllMedias = async (req, res) => {
+    new SuccessResponse({
+      message: "User registered successfully!",
+      metadata: await mediaService.getAllMedias(),
+    }).send(res);
+  };
 }
 
 module.exports = new MediaController();

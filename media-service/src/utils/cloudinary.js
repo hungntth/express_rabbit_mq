@@ -7,7 +7,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-const uploadMediaToCloud = ({file}) => {
+const uploadMediaToCloud = ({ file }) => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
@@ -27,4 +27,14 @@ const uploadMediaToCloud = ({file}) => {
   });
 };
 
-module.exports = { uploadMediaToCloud };
+const deleteMediaCloud = async ({ publicId }) => {
+  try {
+    const result = await cloudinary.uploader.destroy(publicId);
+    logger.info("Media deleted successfuly from cloud storage", publicId);
+    return result;
+  } catch (e) {
+    logger.error("error deleting media frome cloudinary", e);
+  }
+};
+
+module.exports = { uploadMediaToCloud, deleteMediaCloud };
