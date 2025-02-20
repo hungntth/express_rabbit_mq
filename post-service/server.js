@@ -1,7 +1,7 @@
 const app = require("./src/app");
 const { connectRabbitMQ } = require("./src/utils/rabbitmq");
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 const server = app.listen(PORT, async() => {
   await connectRabbitMQ();

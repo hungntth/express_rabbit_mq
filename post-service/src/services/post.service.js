@@ -20,6 +20,14 @@ const createPost = async ({ content, mediaIds = [], userId, redisClient }) => {
   });
 
   await newlyCreatedPost.save();
+
+  await publishEvent("post.created", {
+    postId: newlyCreatedPost._id.toString(),
+    userId: newlyCreatedPost.user.toString(),
+    content: newlyCreatedPost.content,
+    createdAt: newlyCreatedPost.createdAt,
+  });
+
   await invalidatePostsCache({
     redisClient,
     input: newlyCreatedPost._id.toString(),
