@@ -1,4 +1,4 @@
-const Search = require("../models/search");
+const Search = require("../models/Search");
 
 const searchPost = async ({ query }) => {
   const results = await Search.find(

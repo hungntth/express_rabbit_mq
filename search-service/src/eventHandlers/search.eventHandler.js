@@ -1,4 +1,4 @@
-const Search = require("../models/search");
+const Search = require("../models/Search");
 
 async function handlerPostCreated(event) {
   const newSearchPosts = new Search({
